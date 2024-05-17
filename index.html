@@ -4,18 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css"/>
+    <link rel="icon" href="docs/meteor.png" type="image/x-icon">
     <title>Desafio Tarken</title>
 </head>
 <body>
     <!-- Header -->
-    <header></header>
-    <!-- Main -->
-    <main></main>
-    <!-- Footer -->
-    <footer></footer>
+    <header>
+        <div class="header-title">
+            <img src="docs/meteor.png" alt="Ícone Meteoro" width="32" height="32">
+            <h1>Desafio Meteoro</h1>
+        </div>
 
-    <canvas id="canvas"></canvas>
-    <canvas id="colors"></canvas>
+        <nav>
+            <a href="#section-1">Sobre</a>
+            <a href="#section-2">Tarefas 1 e 2</a>
+            <a href="#section-3">Tarefa 3</a>
+        </nav>
+    </header>
+    <!-- Main -->
+    <main>
+        <section id="section-1">
+            <div class="image-container left">          
+                <canvas id="canvas"></canvas>
+            </div>
+            <div class="text-container">
+                <h2>Sobre o Desafio</h2>
+                <p>
+                    O Desafio do Meteoro, como é chamado, é um desafio computacional que tem como objetivo realizar tarefas através da análise 
+                    de uma imagem disponibilizada. Com esse intuito, é necessário resolver as questões propostas de maneira eficiente e limpa.
+                    Nesse código, esse desafio foi realizado em javascript, e para complementar a visualização as respostas e explicações também
+                    estarão, em partes, disponíveis nas seções abaixo.
+                </p>
+
+                <ul>
+                    <li>Conte o número de Estrelas</li>
+                    <li>Conte o número de Meteoros</li>
+                    <li>Considerando que os meteoros estão caindo perpendicularmente ao solo (nível da água), conte quantos irão cair na água.</li>
+                    <li>(opcional) Encontre a frase escondida nos pontos entre o céu.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="section-2">
+            <div class="text-container left">
+                <h2>Tarefa 1</h2>
+                <h4 id="stars">
+                    Número de Estrelas: 
+                </h4>
+                <p class="coord" id="stars2">
+                    Coordenadas: 
+                </p>
+            </div>
+            <div class="text-container">
+                <h2>Tarefa 2</h2>
+                <h4 id="meteors">
+                    Número de Meteoros: 
+                </h4>
+                <p class="coord" id="meteors2">
+                    Coordenadas: 
+                </p>
+            </div>
+        </section>
+
+        <section id="section-3">
+            <div class="text-container left">
+                <h2>Tarefa 3</h2>
+                <h4 id="water">
+                    Número de Meteoros na Água: 
+                </h4>
+                <p>
+                   Na imagem a direita, as linhas em ciano indicam os meteoros que se conectam aos lagos paralelamente.
+                </p>
+                <p class="coord" id="water2">
+                   Coordenadas: 
+                </p>
+            </div>
+
+            <div class="image-container">          
+                <canvas id="meteor_shower"></canvas>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Alec Can Yalçin. Todos os direitos reservados.</p>
+    </footer>
+    
     <script src="script.js"></script>
 </body>
 </html>

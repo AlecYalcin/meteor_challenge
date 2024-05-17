@@ -1,0 +1,117 @@
+/* Geral */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f4f4f4;;
+}
+
+/* Header */
+
+header {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+}
+.header-title img {
+    margin-right: 10px;
+}
+header h1 {
+    margin: 0;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header nav a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+/* Main */
+
+main {
+    flex: 1;
+    padding: 1em;
+}
+
+section {
+    background-color: white;
+    margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex;
+    scroll-margin-top: 15vh
+}
+
+.text-container .coord {
+    word-wrap: break-word;
+    font-size: 12px;
+}
+
+#stars, #meteors {
+    margin-bottom: 0px;
+}
+
+#section-1 .image-container, #section-3 .image-container {
+    width: 30%;
+}
+
+.image-container canvas, .image-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+#section-1 .text-container, #section-3 .text-container {
+    width: 70%;
+    text-align: justify;
+}
+
+.text-container ul {
+    list-style-type: upper-roman;
+}
+
+.left {
+    margin-right: 20px;
+}
+
+#section-2 .image-container {
+    width: 25%;
+}
+
+#section-2 .text-container {
+    width: 50%;
+    text-align: justify;
+}
+
+#section-2 h2, #section-2 h4 {
+    text-align: center;
+}
+
+/* Footer */
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1em;
+}

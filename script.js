@@ -3,16 +3,10 @@ var img = new Image();
 img.src = 'docs/meteor_challenge_01.png';
 // Criando a Imagem para Análise
 img.onload = function() {
-    // Canvas e Dados da Imagem
     let image_canvas = document.getElementById("canvas");
-    let image_context = canvas.getContext("2d");
-
-    image_canvas.width = img.width;
-    image_canvas.height = img.height;
-
-    image_context.drawImage(img, 0, 0)
-
-    image_matrix = imageArray(image_canvas, image_context);
+    // Canvas e Dados da Imagem
+    let image_context = createCanvas("canvas", img)
+    let image_matrix = imageArray(image_canvas, image_context);
     // Cores de Estrelas e Meteoros
     let white = [255, 255, 255, 255];   // rgba(255,255,255,255)    - Branco
     let red   = [255,0,0,255];          // rgba(255,0,0,255)        - Vermelho
@@ -53,7 +47,63 @@ img.onload = function() {
         Meteoros: red_meteors
         Meteoros perpendiculares a água: meteor_in_water
     */
+
+    // Edição de Página 
+    load_page_assets(image_matrix, white_stars, red_meteors, meteor_in_water, img)
 }
+
+// Funções da Página
+function load_page_assets(matrix, stars, meteors, meteor_water, _img) {
+    // Seção 2.1
+    inputHtml("#stars",stars.length);
+    stars.forEach(star_coord => {
+        inputHtml("#stars2",`[${star_coord}], `);
+    });
+    // Seção 2.2
+    inputHtml("#meteors",meteors.length);
+    meteors.forEach(meteor_coord => {
+        inputHtml("#meteors2",`[${meteor_coord}], `);
+    });
+    // Seção 3
+    let context = createCanvas("meteor_shower", _img);
+    for(let i = 0; i < meteors.length; i++) {
+        let blue  = [0,0,255,255];
+        let x = meteors[i][1];
+        let y = meteors[i][0];
+
+        let height_start = y;
+        while(height_start < matrix.length) {
+            let cor_percorrida = matrix[height_start][x];
+
+            if(compareArray(cor_percorrida, blue)) {
+                context.fillStyle = 'cyan'
+                context.fillRect(x, y+1, 1, height_start-y);
+                break;
+            }
+
+            height_start++;
+        }
+    }
+
+    inputHtml("#water",meteor_water.length);
+    meteor_water.forEach(water_coord => {
+        inputHtml("#water2",`[${water_coord}], `);
+    });
+}
+
+
+// Cria um canvas apartir da imagem e id
+function createCanvas(id, _img) {
+    let canvas = document.getElementById(id);
+    let context = canvas.getContext("2d");
+
+    canvas.width = _img.width;
+    canvas.height = _img.height;
+
+    context.drawImage(_img, 0, 0);
+    return context;
+}
+
 // Coleta Dados da Imagem
 function imageArray(canvas, context) {
     var pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
@@ -74,4 +124,9 @@ function imageArray(canvas, context) {
 // Utils
 function compareArray(a, b) {
     return a.toString() === b.toString();
+}
+
+function inputHtml(identifier, variable) {
+    obj = document.querySelector(identifier);
+    obj.innerHTML += variable;
 }
