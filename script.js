@@ -1,151 +1,77 @@
-// Criando uma nova imagem
+// Carregando a Imagem
 var img = new Image();
-img.src = "meteor_challenge_01.png";
-
+img.src = 'docs/meteor_challenge_01.png';
+// Criando a Imagem para Análise
 img.onload = function() {
-    // Transformando a imagem em um canvas
-    var canvas = document.getElementById("canvas");
-    var ctx = canvas.getContext("2d");
-    // Coletando dados de tamanho da imagem
-    canvas.width = img.width;
-    canvas.height = img.height;
-    // Desenhando a imagem 
-    ctx.drawImage(img, 0, 0);
-    // Coletando os dados do canva criado
-    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    var pixels = imageData.data;
-    // Converte os dados dos pixels em uma matriz de duas dimensões
-    var matriz = [];
-    for (let i = 0; i < pixels.length; i += 4) {
-        var pixel = [pixels[i], pixels[i + 1], pixels[i + 2], pixels[i + 3]];
-        matriz.push(pixel);
-    }
+    // Canvas e Dados da Imagem
+    let image_canvas = document.getElementById("canvas");
+    let image_context = canvas.getContext("2d");
 
-    var matriz_n = [];
-    for(let y = 0; y < canvas.height; y++) {
-        let linha = [];
+    image_canvas.width = img.width;
+    image_canvas.height = img.height;
 
-        for(let x = 0; x < canvas.width; x++) {
-            const indice = (y * canvas.width + x) * 4;
-            const rgba = [pixels[indice], pixels[indice+1], pixels[indice+2], pixels[indice+3]]
-            linha.push(rgba);
-        }
+    image_context.drawImage(img, 0, 0)
 
-        matriz_n.push(linha);
-    }
+    image_matrix = imageArray(image_canvas, image_context);
+    // Cores de Estrelas e Meteoros
+    let white = [255, 255, 255, 255];   // rgba(255,255,255,255)    - Branco
+    let red   = [255,0,0,255];          // rgba(255,0,0,255)        - Vermelho
+    let blue  = [0,0,255,255];          // rgba(0,0,255,255)        - Azul
+    // Encontrando as Estrelas, Meteoros e Água
+    let white_stars = [];
+    let red_meteors = [];
+    let water = [];
 
-
-    var color_chart = [];
-    var color_repeater = [];
-    for (let i = 0; i < matriz.length; i++) {
-        // Crio um novo Set de cores
-        color = [];
-
-        // Preencho as cores no Set
-        for(let j = 0; j < matriz[i].length; j++) {
-            color.push(matriz[i][j])
-        }
-
-
-        // Verifico se há color_chart comparável
-        if(color_chart.length > 0) {
-            let repete = false;
-
-            for(let c = 0; c < color_chart.length; c++) {
-                if(compareArray(color, color_chart[c])) {
-                    repete = true;
-                    color_repeater[c] += 1;
-                }
+    for(let i = 0; i < image_matrix.length; i++) {
+        for(let j = 0; j < image_matrix.length; j++) {
+            if(compareArray(image_matrix[i][j], white)) {
+                white_stars.push([i,j]);
             }
-
-            if(!(repete)) {
-                color_chart.push(color);
-                color_repeater.push(1);
-                // console.log(`Cor Nova: ${i}, ${matriz[i]}`);
+            if(compareArray(image_matrix[i][j], red)) {
+                red_meteors.push([i,j]);
             }
-        } else {
-            color_chart.push(color)
-            color_repeater.push(1);
-        }
-    }
-
-    console.log(color_chart);
-    console.log(color_repeater);    
-
-    white_stars = [];
-    red_meteors = [];
-    for(let i = 0; i < 704; i++) {
-        for(let j = 0; j < 704; j++) {
-            if(compareArray(matriz_n[i][j], color_chart[1])) {
-                white_stars.push([i,j])
-            }
-            if(compareArray(matriz_n[i][j], color_chart[2])) {
-                red_meteors.push([i,j])
+            if(compareArray(image_matrix[i][j], blue)) {
+                water.push([i,j]);
             }
         }
     }
 
-    console.log(red_meteors);
-
-        //matriz[108]
+    // Verificando quais meteoros vão cair na água
+    let meteor_in_water = [];
     for(let i = 0; i < red_meteors.length; i++) {
-        x = red_meteors[i][1]
-        y = red_meteors[i][0]
-
-        height_start = y;
-        while(height_start < matriz_n.length) {
-            cor_percorrida = matriz_n[height_start][x];
-
-            if(compareArray(cor_percorrida,color_chart[108])) {
-                console.log(`Água em ${cor_percorrida} de height=${height_start}, width=${x}`);
-                      
-                ctx.fillStyle = 'green'
-                ctx.fillRect(x, y+1, 1, height_start-y);
-                
-                break;
-            }
-
-            height_start++;
+        if(water.some(water_coord => water_coord[1] == red_meteors[i][1])) {
+            meteor_in_water.push(red_meteors[i])
         }
     }
 
-    var color_canvas = document.getElementById("colors");
-    var color_context = color_canvas.getContext("2d");
+    console.log(`Número de Estrelas: ${white_stars.length}`)
+    console.log(`Número de Meteoros: ${red_meteors.length}`)
+    console.log(`Meteoros Caindo na Água: ${meteor_in_water.length}`)
 
-    color_canvas.width = 200;
-    color_canvas.height = color_chart.length*3;
-    // Desenhando a imagem 
-    for(let i = 0; i < color_chart.length; i++) {
-        const array_rgba = (array) => {
-            return `rgba(${array[0]},${array[1]},${array[2]},${array[3]})`
-        };
+    /* Variáveis e Valores
+        Estrelas: white_stars
+        Meteoros: red_meteors
+        Meteoros perpendiculares a água: meteor_in_water
+    */
+}
+// Coleta Dados da Imagem
+function imageArray(canvas, context) {
+    var pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
 
-        color = array_rgba(color_chart[i])
-        color_context.fillStyle = color
-        color_context.fillRect(0, i*3, 200, 3)
+    var image_matrix = [];
+    for(let y = 0; y < canvas.height; y++) {
+        let line = [];
+        for(let x = 0; x < canvas.width; x++) {
+            let index = (y * canvas.width + x) * 4;
+            let row = [pixels[index], pixels[index+1], pixels[index+2], pixels[index+3]];
+            line.push(row);
+        }
+        image_matrix.push(line);
     }
-};
 
+    return image_matrix;
+}
+// Utils
 function compareArray(a, b) {
     return a.toString() === b.toString();
 }
-
-function getColorFromCoordinate(x, y, width) {
-    const pixel = y * (width * 4) + x * 4;
-    return [pixel, pixel+1, pixel+2, pixel+3];
-}
-
-
-// function cor_existente(cor, color_chart) {
-//     const compareArrays = (a,b) => {
-//         return a.toString() === b.toString();
-//     };
-
-//     for(let i = 0; i < color_chart.length; i++) {
-//         if(compareArrays(color_chart[i],color)) {
-//             return true;
-//         }
-//     }
-
-//     return false;
-// } 
